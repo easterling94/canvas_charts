@@ -1,9 +1,34 @@
-$body-color: rgb(190, 190, 190);
-
+$body-color: rgb(220, 246, 250);
+* {
+  margin: 0px;
+  padding: 0px;
+}
 body {
   background-color: $body-color;
 }
-h1 {
+.header {
   text-align: center;
-  
+  margin: 30px 0px;
+}
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  max-width: 800px;
+  height: 100vh;
+  margin: 0px auto;
+}
+
+.container {
+  display: flex;
+  justify-content: center;
+  background-color: white;
+  padding: 10px 0px;
+  border-radius: 10px;
+}
+
+canvas {
+  background-color: rgb(224, 223, 223);
+  border-radius: 10px;
+  padding: 0px 30px;
 }
