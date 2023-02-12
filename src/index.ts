@@ -1,15 +1,34 @@
 import { IDotToPlot, prepareDots } from './dots-logic'; 
 import './assets/styles.scss';
-import { WIDTH, HEIGHT, DPI_WIDTH, DPI_HEIGHT, AXIS_LINES_Y,STEP_AXIS_LINES_Y, PADDING } from './consts'; 
+import { WIDTH, HEIGHT, DPI_WIDTH, DPI_HEIGHT, PADDING } from './consts'; 
+import { createAxisLinesX, createAxisLinesY } from './axis-logic';
+import { travelDotsCalculation } from './travel-logic';
 
 const chart = document.getElementById("chart") as HTMLCanvasElement;
 chart.addEventListener('click', generateChart)
-const ctx = chart.getContext('2d')!;
+export const ctx = chart.getContext('2d')!;
 
 chart.style.width = WIDTH + 'px';
 chart.style.height = HEIGHT + 'px';
 chart.width = DPI_WIDTH;
 chart.height = DPI_HEIGHT + PADDING;
+
+let STARTING_DOTS: Array<IDotToPlot> = [
+  {
+    name: 1,
+    coordinates: {
+      x: 0,
+      y: 0,
+      }
+  },
+  {
+    name: 2,
+    coordinates: {
+      x: 0,
+      y: 0,
+      }
+  }
+]
 
 const createChart = (dotsToDraw: Array<IDotToPlot>) => {
   ctx.clearRect(0,0,DPI_WIDTH + PADDING, DPI_HEIGHT + PADDING);
@@ -26,42 +45,19 @@ const createChart = (dotsToDraw: Array<IDotToPlot>) => {
   ctx.closePath()
 }
 
-function createAxisLinesY() {
-  ctx.beginPath();
-  ctx.lineWidth = 1;
-  ctx.font = 'normal 20px Arial'
-  ctx.strokeStyle = '#bbb'
-  for (let i = 1; i < AXIS_LINES_Y + 1; i++) {
-    const y = STEP_AXIS_LINES_Y * i;
-    ctx.fillText((DPI_HEIGHT - y).toString(), 0, y - 10)
-    ctx.moveTo(0, y);
-    ctx.lineTo(DPI_WIDTH, y);
-  }
-  ctx.stroke();
-  ctx.closePath();
-}
-
-function createAxisLinesX(labelsAxisX: Array<number>) {
-  ctx.beginPath();
-  ctx.lineWidth = 1;
-  ctx.font = 'normal 20px Arial'
-  ctx.strokeStyle = '#bbb'
-  for (let i = 1; i < labelsAxisX.length + 1; i++) {
-    const x = DPI_WIDTH / (labelsAxisX.length + 1) * i;
-    ctx.fillText(labelsAxisX[i - 1].toString(), x - 5, DPI_HEIGHT + 30)
-    ctx.moveTo(x, 0);
-    ctx.lineTo(x, DPI_HEIGHT);
-  }
-  ctx.stroke();
-  ctx.closePath();
-}
 function generateChart() {
   const dotsToDraw = prepareDots(DPI_WIDTH, DPI_HEIGHT);
-  if(chart) {
-    createChart(dotsToDraw)
-  }
+  const travelArray = travelDotsCalculation(STARTING_DOTS, dotsToDraw);
+  STARTING_DOTS = dotsToDraw;
+  // if(chart) {
+  //   travelArray.forEach(array => {
+  //     // setTimeout
+  //     createChart(array)
+  //   })
+  // }
+  createChart(dotsToDraw)
 }
 
 window.onload = function () {
-  generateChart();
+  createChart(STARTING_DOTS)
 }

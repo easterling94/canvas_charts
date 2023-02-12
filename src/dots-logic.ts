@@ -39,6 +39,5 @@ export const prepareDots = (canvasWidth: number, canvasHeight: number) => {
     dotToDraw.coordinates.y = coordinateY;
     preparedDots.push(dotToDraw);
   }
-  console.log(preparedDots)
   return preparedDots;
 }
