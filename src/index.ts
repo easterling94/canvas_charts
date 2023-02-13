@@ -45,19 +45,24 @@ const createChart = (dotsToDraw: Array<IDotToPlot>) => {
   ctx.closePath()
 }
 
-function generateChart() {
+async function generateChart() {
   const dotsToDraw = prepareDots(DPI_WIDTH, DPI_HEIGHT);
   const travelArray = travelDotsCalculation(STARTING_DOTS, dotsToDraw);
   STARTING_DOTS = dotsToDraw;
-  // if(chart) {
-  //   travelArray.forEach(array => {
-  //     // setTimeout
-  //     createChart(array)
-  //   })
-  // }
+
+  // generateTravelChart(travelArray)
+
   createChart(dotsToDraw)
 }
 
 window.onload = function () {
   createChart(STARTING_DOTS)
+}
+
+const generateTravelChart = async (array: Array<Array<IDotToPlot>>) => {
+  array.forEach(el => {
+    console.log(el)
+    createChart(el)
+  }
+    )
 }
