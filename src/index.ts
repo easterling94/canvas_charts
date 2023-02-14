@@ -30,7 +30,7 @@ let STARTING_DOTS: Array<IDotToPlot> = [
   }
 ]
 
-const createChart = (dotsToDraw: Array<IDotToPlot>) => {
+const createChart = async (dotsToDraw: Array<IDotToPlot>) => {
   ctx.clearRect(0,0,DPI_WIDTH + PADDING, DPI_HEIGHT + PADDING);
   const labelsAxisX = dotsToDraw.map(dot => dot.name)
   createAxisLinesY();
@@ -47,22 +47,17 @@ const createChart = (dotsToDraw: Array<IDotToPlot>) => {
 
 async function generateChart() {
   const dotsToDraw = prepareDots(DPI_WIDTH, DPI_HEIGHT);
-  const travelArray = travelDotsCalculation(STARTING_DOTS, dotsToDraw);
+  const travelArray = travelDotsCalculation(STARTING_DOTS, dotsToDraw)!;
   STARTING_DOTS = dotsToDraw;
 
-  // generateTravelChart(travelArray)
-
-  createChart(dotsToDraw)
+  for (let i = 0; i < travelArray.length; i++) {
+    const promise: Array<IDotToPlot> = await new Promise((res, rej) => {
+      setTimeout(() => res(travelArray[i]), 10)
+    })
+    await createChart(promise)
+  }
 }
 
 window.onload = function () {
   createChart(STARTING_DOTS)
-}
-
-const generateTravelChart = async (array: Array<Array<IDotToPlot>>) => {
-  array.forEach(el => {
-    console.log(el)
-    createChart(el)
-  }
-    )
 }
