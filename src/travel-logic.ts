@@ -47,6 +47,7 @@ const OldMoreNew = (oldArray:Array<IDotToPlot>, newArray: Array<IDotToPlot>, che
   let travelArray: Array<Array<IDotToPlot>> = [];
 
   oldArray.splice((newArray.length - 1),(oldArray.length - newArray.length))
+  oldArray[oldArray.length - 1].name = newArray[oldArray.length - 1].name
 
   travelArray = travelLogic(oldArray, newArray, check)
   return travelArray
