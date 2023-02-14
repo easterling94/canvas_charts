@@ -1,6 +1,6 @@
 import { IDotToPlot } from './dots-logic'
 
-const TRAVEL_STEP = 30;
+const TRAVEL_STEP = 20;
 
 interface ICoefficientsArray {
   A: number,
@@ -9,18 +9,19 @@ interface ICoefficientsArray {
 }
 
 export const travelDotsCalculation = (oldArray: Array<IDotToPlot>, newArray: Array<IDotToPlot>) => {
+  const check = oldArray.length === newArray.length;
   if (oldArray.length > newArray.length) {
-    return OldMoreNew(oldArray, newArray)
+    return OldMoreNew(oldArray, newArray, check)
   }
   if (oldArray.length < newArray.length) {
-    return OldLessNew(oldArray, newArray)
+    return OldLessNew(oldArray, newArray, check)
   } 
   if (oldArray.length === newArray.length) {
-    return OldEqualsNew(oldArray, newArray)
+    return OldEqualsNew(oldArray, newArray, check)
   }
 }
 
-const OldLessNew = (oldArray:Array<IDotToPlot>, newArray: Array<IDotToPlot>) => {
+const OldLessNew = (oldArray:Array<IDotToPlot>, newArray: Array<IDotToPlot>, check: boolean) => {
   let travelArray: Array<Array<IDotToPlot>> = [];
 
   let oldArrayTransformed: Array<IDotToPlot> = new Array(newArray.length);
@@ -38,28 +39,29 @@ const OldLessNew = (oldArray:Array<IDotToPlot>, newArray: Array<IDotToPlot>) => 
     oldArrayTransformed[i].name = newArray[i].name;
   }
 
-  travelArray = travelLogic(oldArrayTransformed, newArray)
-
+  travelArray = travelLogic(oldArrayTransformed, newArray, check)
   return travelArray;
 }
 
-const OldMoreNew = (oldArray:Array<IDotToPlot>, newArray: Array<IDotToPlot>) => {
+const OldMoreNew = (oldArray:Array<IDotToPlot>, newArray: Array<IDotToPlot>, check: boolean) => {
   let travelArray: Array<Array<IDotToPlot>> = [];
-  travelArray.push(newArray)
+
+  oldArray.splice((newArray.length - 1),(oldArray.length - newArray.length))
+
+  travelArray = travelLogic(oldArray, newArray, check)
   return travelArray
 }
 
-const OldEqualsNew = (oldArray:Array<IDotToPlot>, newArray: Array<IDotToPlot>) => {
+const OldEqualsNew = (oldArray:Array<IDotToPlot>, newArray: Array<IDotToPlot>, check: boolean) => {
   let travelArray: Array<Array<IDotToPlot>> = [];
-  travelArray = travelLogic(oldArray, newArray)
+  travelArray = travelLogic(oldArray, newArray, check)
   return travelArray
 }
 
-const travelLogic = (oldArray:Array<IDotToPlot>, newArray: Array<IDotToPlot>) => {
+const travelLogic = (oldArray:Array<IDotToPlot>, newArray: Array<IDotToPlot>, check: boolean) => {
   let travelArray: Array<Array<IDotToPlot>> = [];
   let coefficientsArray: Array<ICoefficientsArray> = [];
-
-  if (oldArray.length !== newArray.length) {
+  if (!check) {
     for (let i = 0; i < newArray.length; i++) {
       const Y1 = oldArray[i].coordinates.y!;
       const Y2 = newArray[i].coordinates.y!;
@@ -67,7 +69,7 @@ const travelLogic = (oldArray:Array<IDotToPlot>, newArray: Array<IDotToPlot>) =>
       const X2 = newArray[i].coordinates.x;
       // coefficients for calculating line based on two points like Ax + By + C = 0
       let A = Y1 - Y2;
-      let B = X2 - X1;
+      let B = X2 - X1 === 0 ? 1 : X2 - X1;
       let C = X1 * Y2 - X2 * Y1;
       const coefficients:ICoefficientsArray = {A: A, B: B, C: C}
       coefficientsArray.push(coefficients)
@@ -86,7 +88,7 @@ const travelLogic = (oldArray:Array<IDotToPlot>, newArray: Array<IDotToPlot>) =>
       travelArray.push(travelChart)
     }
   }
-  if (oldArray.length === newArray.length) {
+  if (check) {
     for (let j = 1; j < TRAVEL_STEP + 1; j++) {
       const travelChart:Array<IDotToPlot> = oldArray.map((el, i) => {
         const X: number = newArray[i].coordinates.x;
