@@ -30,6 +30,7 @@ module.exports = {
   devServer: {
     static: './dest',
     port: 5000,
+    open: true,
   },
   resolve: {
     extensions: ['.ts', '.js']

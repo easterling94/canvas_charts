@@ -1,3 +1,5 @@
+import { RANDOM_MAX, RANDOM_MIN } from './consts';
+
 export interface IDotToPlot {
   name: number,
   coordinates: {
@@ -5,9 +7,6 @@ export interface IDotToPlot {
     y: number | null,
   }
 }
-
-const RANDOM_MIN = 2;
-const RANDOM_MAX = 10;
 
 const createAxisX = () => {
   let testDotsArr:Array<IDotToPlot> = [];

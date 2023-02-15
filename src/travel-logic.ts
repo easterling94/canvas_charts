@@ -1,6 +1,5 @@
 import { IDotToPlot } from './dots-logic'
-
-const TRAVEL_STEP = 20;
+import { TRAVEL_STEP } from './consts';
 
 interface ICoefficientsArray {
   A: number,
