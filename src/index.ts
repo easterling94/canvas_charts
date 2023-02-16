@@ -1,6 +1,6 @@
-import { IDotToPlot, prepareDots } from './dots-logic'; 
+import { IDotToPlot, prepareDots, drawDots } from './dots-logic'; 
 import './assets/styles.scss';
-import { WIDTH, HEIGHT, DPI_WIDTH, DPI_HEIGHT, PADDING } from './consts'; 
+import { WIDTH, HEIGHT, DPI_WIDTH, DPI_HEIGHT, PADDING, STARTING_DOTS_INITIAL } from './consts'; 
 import { createAxisLinesX, createAxisLinesY } from './axis-logic';
 import { travelDotsCalculation } from './travel-logic';
 
@@ -13,36 +13,21 @@ chart.style.height = HEIGHT + 'px';
 chart.width = DPI_WIDTH;
 chart.height = DPI_HEIGHT + PADDING;
 
-let STARTING_DOTS: Array<IDotToPlot> = [
-  {
-    name: 1,
-    coordinates: {
-      x: 0,
-      y: 0,
-      }
-  },
-  {
-    name: 2,
-    coordinates: {
-      x: 0,
-      y: 0,
-      }
-  }
-]
+let STARTING_DOTS:Array<IDotToPlot> = STARTING_DOTS_INITIAL;
 
 const createChart = async (dotsToDraw: Array<IDotToPlot>) => {
   ctx.clearRect(0,0,DPI_WIDTH + PADDING, DPI_HEIGHT + PADDING);
-  const labelsAxisX = dotsToDraw.map(dot => dot.name)
   createAxisLinesY();
-  createAxisLinesX(labelsAxisX)
+  createAxisLinesX();
   ctx.beginPath();
-  ctx.lineWidth = 4;
-  ctx.strokeStyle = '#ff0000'
+  ctx.lineWidth = 2;
+  ctx.strokeStyle = '#000000'
   for(let i = 0; i < dotsToDraw.length; i++) {
     ctx.lineTo(dotsToDraw[i].coordinates.x, DPI_HEIGHT - dotsToDraw[i].coordinates.y!)
   }
   ctx.stroke();
   ctx.closePath()
+  drawDots(dotsToDraw);
 }
 
 async function generateChart() {

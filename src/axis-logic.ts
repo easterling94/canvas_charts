@@ -4,11 +4,9 @@ import { ctx } from './index';
 export function createAxisLinesY() {
   ctx.beginPath();
   ctx.lineWidth = 1;
-  ctx.font = 'normal 20px Arial'
-  ctx.strokeStyle = '#bbb'
+  ctx.strokeStyle = '#000000'
   for (let i = 1; i < AXIS_LINES_Y + 1; i++) {
     const y = STEP_AXIS_LINES_Y * i;
-    ctx.fillText((DPI_HEIGHT - y).toString(), 0, y - 10)
     ctx.moveTo(0, y);
     ctx.lineTo(DPI_WIDTH, y);
   }
@@ -16,17 +14,13 @@ export function createAxisLinesY() {
   ctx.closePath();
 }
 
-export function createAxisLinesX(labelsAxisX: Array<number>) {
+export function createAxisLinesX() {
   ctx.beginPath();
   ctx.lineWidth = 1;
   ctx.font = 'normal 20px Arial'
-  ctx.strokeStyle = '#bbb'
-  for (let i = 1; i < labelsAxisX.length + 1; i++) {
-    const x = DPI_WIDTH / (labelsAxisX.length + 1) * i;
-    ctx.fillText(labelsAxisX[i - 1].toString(), x - 5, DPI_HEIGHT + 30)
-    ctx.moveTo(x, 0);
-    ctx.lineTo(x, DPI_HEIGHT);
-  }
+  ctx.strokeStyle = '#000000'
+  ctx.moveTo(0, 0);
+  ctx.lineTo(0, DPI_HEIGHT);
   ctx.stroke();
   ctx.closePath();
 }

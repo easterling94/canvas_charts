@@ -1,4 +1,5 @@
-import { RANDOM_MAX, RANDOM_MIN } from './consts';
+import { RANDOM_MAX, RANDOM_MIN, DPI_HEIGHT, SQUEEZE_Y_COEFF } from './consts';
+import { ctx } from './index';
 
 export interface IDotToPlot {
   name: number,
@@ -32,11 +33,24 @@ export const prepareDots = (canvasWidth: number, canvasHeight: number) => {
     const coordinateX = Math.floor(canvasWidth * (1 + dotsArr[i].coordinates.x) / (dotsArr.length + 1));
     const randomY = Math.random();
     const randomYDir = Math.floor(Math.random() * 2);
-    const coordinateY = Math.floor(canvasHeight / 2 * (randomYDir === 1 ? (1 + randomY) : (1 - randomY)));
+    const coordinateY = Math.floor((canvasHeight * SQUEEZE_Y_COEFF) / 2 * (randomYDir === 1 ? (1 + randomY) : (1 - randomY)));
     const dotToDraw: IDotToPlot = dotsArr[i];
     dotToDraw.coordinates.x = coordinateX;
-    dotToDraw.coordinates.y = coordinateY;
+    dotToDraw.coordinates.y = coordinateY ;
     preparedDots.push(dotToDraw);
   }
   return preparedDots;
+}
+
+export const drawDots = (array: Array<IDotToPlot>) => {
+
+  for (let i = 0; i < array.length; i++) {
+    ctx.beginPath();
+    ctx.strokeStyle = '#000000'
+    ctx.arc(array[i].coordinates.x, DPI_HEIGHT - array[i].coordinates.y!, 10, 0, 2 * Math.PI);
+    ctx.fillStyle = "#ffffff";
+    ctx.fill();
+    ctx.stroke();
+  }
+
 }
